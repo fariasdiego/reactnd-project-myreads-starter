@@ -4,7 +4,6 @@ import Book from './Book';
 import styled from 'styled-components';
 import BooksGrid from './BooksGrid';
 
-
 const Shelf = styled.div`
   padding: 0 10px 20px;
 
