@@ -7,6 +7,12 @@ import {
 import Search from './components/Search';
 import ListBooks from './components/ListBooks';
 import * as BooksAPI from './BooksAPI';
+import styled from 'styled-components';
+import _ from 'lodash';
+
+const App = styled.div`
+  background: white;
+`;
 
 class BooksApp extends React.Component {
   state = {
@@ -14,10 +20,6 @@ class BooksApp extends React.Component {
   }
 
   componentWillMount() {
-    this.getBooks();
-  }
-
-  getBooks = () => {
     BooksAPI.getAll().then(books => {
       this.setState({
         books
@@ -27,14 +29,16 @@ class BooksApp extends React.Component {
 
   changeShelf = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
-      this.getBooks();
+      this.setState({
+        books: _.uniqBy([{...book, shelf}, ...this.state.books], 'id')
+      });
     });
   }
 
   render() {
     return (
       <Router>
-        <div className="app">
+        <App>
           <Route exact path="/" render={() => (
             <ListBooks 
               books={this.state.books} 
@@ -47,7 +51,7 @@ class BooksApp extends React.Component {
               changeShelf={this.changeShelf}
             />
           )}/>
-        </div>
+        </App>
       </Router>
     )
   }
